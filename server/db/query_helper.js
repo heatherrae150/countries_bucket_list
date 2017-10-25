@@ -10,6 +10,18 @@ var queryHelper = {
         onQueryFinished(countries);
       })
     })
+  },
+  save: function(countryData, onQueryFinished){
+    MongoClient.connect(this.url, function(err, db){
+      var countriesCollection = db.collection("countries")
+
+      countriesCollection.insert(countryData);
+
+      countriesCollection.find().toArray(function(err, countries){
+        onQueryFinished(countries);
+      })
+
+    })
   }
 }
 

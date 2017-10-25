@@ -11,5 +11,18 @@ router.get("/", function(req, res){
   })
 })
 
+router.post("/", function(req, res){
+
+  var country = {
+    country_name: "Australia",
+    population: 3
+  }
+
+  queryHelper.save(country, function(updatedCountries){
+    console.log(updatedCountries);
+  })
+})
+
+
 
 module.exports = router;
