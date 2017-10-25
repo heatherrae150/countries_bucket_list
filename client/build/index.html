@@ -3,17 +3,33 @@
   <head>
     <meta charset="utf-8">
     <title>Bucket list</title>
+    <link rel="stylesheet" href="/style.css">
     <script type="text/javascript" src="bundle.js">
     </script>
   </head>
   <body>
+
+
+    <div id="banner">
+      <h1 id="title">Travel Bucket List</h1>
+    </div>
+
+
     <form id="new-country">
-      <label for="country-name-select">Country name</label>
+      <label for="country-name-select">Add a country to your bucket list</label>
+      <br>
       <select id="country-name-select">
+        <br><br>
       <input id= "country-submit-button" type="submit" name="submit-new-country" type="submit">
     </form>
-    <div id = "main-div">
+
+
+    <div id="bucket-list">
+
+      <h2>Your bucket list...</h2>
+      <div id = "main-div"></div>
 
     </div>
+
   </body>
 </html>
