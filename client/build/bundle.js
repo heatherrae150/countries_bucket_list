@@ -68,10 +68,20 @@
 /***/ (function(module, exports, __webpack_require__) {
 
 var countries = __webpack_require__(1)
+var requestHelper = __webpack_require__(4)
+var makeFormWork = __webpack_require__(3);
+var renderList = __webpack_require__(2);
 
 window.addEventListener("load", function(){
 
-countries.getCountries();
+  makeFormWork()
+
+  requestHelper.getRequest("http://localhost:3000/api/countries",
+  function(countries){
+    renderList(countries);
+  })
+
+  countries.getCountries();
 })
 
 
@@ -99,8 +109,107 @@ var countries = {
   }
 }
 
-
 module.exports = countries;
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports) {
+
+var renderList = function(countries){
+  var mainDiv = document.querySelector("#main-div");
+
+  mainDiv.innerHTML = "";
+
+  var list = document.createElement("list");
+
+  countries.forEach(function(country){
+    var listItem = document.createElement("li")
+
+    listItem.innerText = country.country_name;
+
+    list.appendChild(listItem)
+  })
+  mainDiv.appendChild(list);
+}
+
+module.exports = renderList;
+
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var requestHelper = __webpack_require__(4);
+var renderList = __webpack_require__(2);
+
+var onSubmit = function(event){
+  event.preventDefault();
+  var select = document.getElementById("country-name-select")
+  console.log(select.value);
+
+  var country = {
+    country_name: select.value
+  }
+
+  requestHelper.postRequest(
+    "http://localhost:3000/api/countries",
+    function(result){
+      console.log("Responding to post request", result)
+      renderList(result)
+    },
+    country
+  )
+
+}
+
+var makeFormWork = function(){
+  var form = document.querySelector("#new-country")
+
+  form.addEventListener("submit", onSubmit)
+}
+
+module.exports = makeFormWork;
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports) {
+
+var requestHelper = {
+  getRequest: function(url, callback){
+    var request = new XMLHttpRequest();
+    request.open("GET", url)
+
+    request.addEventListener("load", function(){
+      var jsonString = request.responseText;
+      var data = JSON.parse(jsonString);
+      callback(data)
+    })
+    request.send();
+  },
+
+  postRequest: function(url, callback, payload){
+    var request = new XMLHttpRequest();
+    request.open("POST", url)
+
+    request.setRequestHeader("Content-Type", "application/json")
+
+    request.addEventListener("load", function(){
+      if (request.status != 200) return
+      var jsonString = request.responseText;
+      var data = JSON.parse(jsonString)
+      callback(data)
+    })
+
+    var jsonString = JSON.stringify(payload);
+
+    request.send(jsonString)
+  }
+
+}
+
+module.exports = requestHelper;
 
 
 /***/ })

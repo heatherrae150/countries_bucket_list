@@ -18,5 +18,4 @@ var countries = {
   }
 }
 
-
 module.exports = countries;

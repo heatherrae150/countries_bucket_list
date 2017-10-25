@@ -12,14 +12,12 @@ router.get("/", function(req, res){
 })
 
 router.post("/", function(req, res){
+  console.log("post request body:", req.body);
+  var country = req.body;
 
-  var country = {
-    country_name: "Australia",
-    population: 3
-  }
 
   queryHelper.save(country, function(updatedCountries){
-    console.log(updatedCountries);
+    res.json(updatedCountries);
   })
 })
 
